@@ -1,0 +1,54 @@
+import * as _ from 'lodash'
+import extractFieldASTs from './extractFieldASTs'
+import ResolveError from './ResolveError'
+import { ResolveErrorType } from './ResolveError'
+import resolveField from './resolveField'
+import { Context, ObjectMap, Scope, Transformer } from './types'
+
+export default async function resolveConfig(
+  obj: ObjectMap<any>,
+  scopes: ObjectMap<Scope>,
+  transformers: ObjectMap<Transformer>
+): Promise<ObjectMap<any>> {
+
+  obj = Object.assign(obj)
+  let asts = extractFieldASTs(obj)
+  if (Object.keys(asts).length === 0) {
+    return obj
+  }
+
+  let resolved: number
+  while (resolved !== 0) {
+    resolved = 0
+    for (let path in asts) {
+      const ctx: Context = {
+        original: obj,
+        asts,
+        scopes,
+        transformers,
+      }
+      await resolveField(asts[path], ctx).then( res => {
+        resolved++
+        _.set(obj, path, res)
+        asts = _.omit(asts, path)
+      }).catch( err => {
+        if ( err instanceof ResolveError ) {
+          if ( err.errorType !== ResolveErrorType.WAITING ) {
+            err.path = path
+            throw err
+          } // else ignore error and continue on
+        } else {
+          throw err
+        }
+      })
+    }
+  }
+
+  if (Object.keys(asts).length > 0) {
+    const msg = 'Could not resolve all variables, check your config for dependency loops'
+    throw(new ResolveError(msg))
+  }
+
+  return obj
+
+}

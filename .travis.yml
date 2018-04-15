@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- '8'
+deploy:
+  provider: npm
+  on:
+    tags: true
+    branch: master
+  email: 'luca.catallo.293@gmail.com'
+  api_key:
+    secure: WOlMZShaPdZZzhEkPQdLWLTNrUmma4qvZJrcJPp3IRdtT8/vm2G/UL69DqABTdUP5HU7v7s6vHeHt4dxJtrRJIHzsIS7bGO/x78MRnurBYQR8+E+uh5kecufjuMsEeizyJ3kvS67GLldeR4fVgOmi/l6i5E9lz4R3VSXECYxhWthS+kOVBTi30W+VSD6MZ8qivRlrrOCNgXEft9Gt9IUzqlbotTX7+8D+v6v9COwag4gGeywBN0VYCAZzHNwbl28XlZ75igJEkOGkHREuxDlJ9u6e/+m7ZuxvGZgfVD34eCaOy1xzRQbyHLpEC60PC7Y7ZLjw/AmiaX20HkNarPcbE4e12JuxOGXZGgBnCNbdujOfgra3OfAfzw1U9d78FiOdCnzru9w1Rf4Wmjrnf2nIqMPXoa5ySCXEPcxC53PdRWfchb1srHl6ERASf1Cox+33pxv+bf1KV1NN3tKT66CDWAZ2WEDcszIA9a03De/cgD9/90+ytnoQQw/gGfVeyPZcG+NbM4mNw9pBMFMuwoQnwOidoXARKyEBI0VaPBqL3776IH3OPMVgHcpfA7FenEDOO8uI6Ujt/VZ7+SofLiugMFFX61bFdmY670h+X2/qgfy9M+K18eZX3tkqevW/h/Cq6FoZeI7x3hq0GsfbSEty1SlB5Y52c1AH2NzeuQ7HBo=
