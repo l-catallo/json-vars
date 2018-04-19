@@ -58,7 +58,7 @@ left to right
 
 #### Nesting Variables
 
-Variables can also be places inside a Variable's name or a string Argument, this
+Variables can also be placed inside a Variable's name or a string Argument, this
 works only for unquoted strings.
 
 So in `"${self:foo.${env:ENV_VAR}}"` the inner variable will be resolved and
