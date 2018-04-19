@@ -4,4 +4,4 @@ test
 tsconfig.json
 **/*.test.js
 **/*.map
-
+.travis.yml
