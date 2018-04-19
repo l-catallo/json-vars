@@ -1,7 +1,6 @@
 import * as _ from 'lodash'
 import extractFieldASTs from './extractFieldASTs'
-import ResolveError from './ResolveError'
-import { ResolveErrorType } from './ResolveError'
+import { DependencyError, FatalError, ResolveError } from './errors'
 import resolveField from './resolveField'
 import { Context, ObjectMap, Scope, Transformer } from './types'
 
@@ -33,7 +32,7 @@ export default async function resolveConfig(
         asts = _.omit(asts, path)
       }).catch( err => {
         if ( err instanceof ResolveError ) {
-          if ( err.errorType !== ResolveErrorType.WAITING ) {
+          if ( !err.shouldWait() ) {
             err.path = path
             throw err
           } // else ignore error and continue on
@@ -46,7 +45,7 @@ export default async function resolveConfig(
 
   if (Object.keys(asts).length > 0) {
     const msg = 'Could not resolve all variables, check your config for dependency loops'
-    throw(new ResolveError(msg))
+    throw(new FatalError(msg))
   }
 
   return obj

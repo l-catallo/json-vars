@@ -1,5 +1,3 @@
-import ResolveError from './ResolveError'
-
 export interface FieldAST {
   raw: string,
   variables: VariableAST[],
@@ -23,14 +21,13 @@ export interface Scope {
   resolve: ( name: string, ctx: Context ) => Promise<Value>
 }
 
-export type Value = number | string | null
+export type Value = number | string | boolean
 
-export interface Transformer {
-  transform: (
-    value: Promise<Value>,
-    ...args: Value[]
-  ) => Promise<Value>
-}
+export type Transformer = (
+  value: Promise<Value>,
+  ...args: Value[]
+) => Promise<Value>
+
 
 export interface LeafVariableAST extends VariableAST {
   match: string,

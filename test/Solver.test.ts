@@ -1,5 +1,5 @@
 import test from 'ava'
-import { ResolveError, ResolveErrorType } from '../src/lib/ResolveError'
+import { FatalError } from '../src/lib/errors'
 
 import Solver from '../src/Solver'
 
@@ -12,7 +12,7 @@ test.beforeEach(t => {
             case 'FOO':
               return 'bar'
             default:
-              throw new ResolveError('')
+              throw new FatalError('')
           }
         }
       }
@@ -33,14 +33,32 @@ test('should ignore a config that does not contain variables', async t => {
   return res.then( o => t.is(obj, o) )
 })
 
-test('should resolve a simple variable', async t => {
+test('should resolve simple variables', async t => {
   const obj = {
     foo: '${env:FOO}',
-    bar: 42,
+    src: {
+      str: 'hello',
+      num: 42,
+      bool: true,
+    },
+    bar: {
+      str: '${self:src.str}',
+      num: '${self:src.num}',
+      bool: '${self:src.bool}',
+    },
   }
   const expected = {
     foo: 'bar',
-    bar: 42,
+    src: {
+      str: 'hello',
+      num: 42,
+      bool: true,
+    },
+    bar: {
+      str: 'hello',
+      num: 42,
+      bool: true,
+    },
   }
   const res = t.context.solver.resolve(obj)
   t.plan(2)
@@ -72,7 +90,6 @@ test('should detect dependency loops and fail', async t => {
     baz: '${self:foo}',
   }
   const res = t.context.solver.resolve(obj)
-  t.plan(2)
-  const err = await t.throws(res, ResolveError)
-  t.is((err as ResolveError).errorType, ResolveErrorType.FATAL)
+  t.plan(1)
+  const err = await t.throws(res, FatalError)
 })

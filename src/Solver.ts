@@ -15,7 +15,7 @@ export class Solver {
         'self': defaultScopes.Self,
       },
       transformers: {
-        'default': defaultTransformers.Default,
+        'default': defaultTransformers.recoverWith,
       },
     }
     this.options = _.merge(defaults, options)

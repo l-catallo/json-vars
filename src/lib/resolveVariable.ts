@@ -2,7 +2,7 @@ import { compose as composeFn, identity } from 'lodash/fp'
 import isFieldAST from './isFieldAST'
 import isLeaf from './isLeaf'
 import resolveField from './resolveField'
-import ResolveError from './ResolveError'
+import { FatalError } from './errors'
 import resolveTransformer from './resolveTransformer'
 import { Context, Value, TransformerAST, VariableAST } from './types'
 
@@ -19,7 +19,7 @@ export default async function resolveVariable(
 ): Promise<Value> {
   const scope = ctx.scopes[ast.scope]
   if (scope === undefined) {
-    throw new ResolveError(`Cannot find Scope ${ast.scope}`)
+    throw new FatalError(`Cannot find Scope ${ast.scope}`)
   }
   // chain all transformers in a single function
   const transform = ast.transformers

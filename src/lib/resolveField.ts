@@ -1,6 +1,5 @@
 import * as _ from 'lodash'
 import isLeaf from './isLeaf'
-import ResolveError from './ResolveError'
 import resolveVariable from './resolveVariable'
 import { Context, FieldAST, ObjectMap, Value } from './types'
 

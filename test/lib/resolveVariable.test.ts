@@ -1,6 +1,5 @@
 import test from 'ava'
-import ResolveError from '../../src/lib/ResolveError'
-import { ResolveErrorType } from '../../src/lib/ResolveError'
+import { DependencyError, FatalError } from '../../src/lib/errors'
 import { Context, LeafVariableAST, Value, VariableAST } from '../../src/lib/types'
 
 import resolveVariable from '../../src/lib/resolveVariable'
@@ -13,6 +12,7 @@ test('should resolve a simple variable', async t => {
     transformers: [],
   }
   const res = resolveVariable(variable, getFakeContext())
+  t.plan(2)
   await t.notThrows(res)
   return res.then( r => {
     t.is(r, 'baz')
@@ -30,6 +30,7 @@ test('should resolve a variable with a single transformer', async t => {
     }],
   }
   const res = resolveVariable(variable, getFakeContext())
+  t.plan(2)
   await t.notThrows(res)
   return res.then( r => {
     t.is(r, 'BAZ')
@@ -50,6 +51,7 @@ test('should resolve Transformers in the correct order', async t => {
     }],
   }
   const res = resolveVariable(variable, getFakeContext())
+  t.plan(2)
   await t.notThrows(res)
   return res.then( r => {
     t.is(r, 'helloworld')
@@ -72,6 +74,7 @@ test('should resolve a Variable that has a FieldAST in the name', async t => {
     transformers: [],
   }
   const res = resolveVariable(variable, getFakeContext())
+  t.plan(2)
   await t.notThrows(res)
   return res.then( r => {
     t.is(r, 'baz')
@@ -87,9 +90,9 @@ test(
       name: 'somename',
       transformers: [],
     }
+    t.plan(2)
     const err = await t.throws(resolveVariable(variable, getFakeContext()))
-    t.true(err instanceof ResolveError)
-    t.is((err as ResolveError).errorType, ResolveErrorType.FATAL)
+    t.true(err instanceof FatalError)
   })
 
 test('should pass on ResolveErrors coming from the scope', async t => {
@@ -99,9 +102,9 @@ test('should pass on ResolveErrors coming from the scope', async t => {
     name: 'foo.biz',
     transformers: [],
   }
+  t.plan(2)
   const err = await t.throws(resolveVariable(variable, getFakeContext()))
-  t.true(err instanceof ResolveError)
-  t.is((err as ResolveError).errorType, ResolveErrorType.WAITING)
+  t.true(err instanceof DependencyError)
 })
 
 function getFakeContext(): Context {
@@ -147,30 +150,25 @@ function getFakeContext(): Context {
           case 'foo.baz':
           case 'foo.biz':
             const msg = `Field ${name} is not yet resolved`
-            const error = new ResolveError(msg, undefined, ResolveErrorType.WAITING)
-            return Promise.reject(error)
+            return Promise.reject(new DependencyError(msg))
           default:
-            return Promise.reject(new ResolveError('Cannot find foo.biz'))
+            return Promise.reject(new FatalError('Cannot find foo.biz'))
         }
       }
     }
   }
   const transformers = {
-    capitalize: {
-      transform(
-        value: Promise<Value>,
-        ...args: Value[]
-      ): Promise<Value> {
-        return value.then( v => v.toString().toUpperCase() )
-      }
+    capitalize(
+      value: Promise<Value>,
+      ...args: Value[]
+    ): Promise<Value> {
+      return value.then( v => v.toString().toUpperCase() )
     },
-    concat: {
-      transform(
-        value: Promise<Value>,
-        ...args: Value[]
-      ): Promise<Value> {
-        return Promise.resolve(args.join(''))
-      }
+    concat(
+      value: Promise<Value>,
+      ...args: Value[]
+    ): Promise<Value> {
+      return Promise.resolve(args.join(''))
     },
   }
 

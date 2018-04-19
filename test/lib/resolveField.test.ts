@@ -1,6 +1,5 @@
 import test from 'ava'
-import ResolveError from '../../src/lib/ResolveError'
-import { ResolveErrorType } from '../../src/lib/ResolveError'
+import { DependencyError, FatalError } from '../../src/lib/errors'
 import { Context, FieldAST, Value } from '../../src/lib/types'
 
 import resolveField from '../../src/lib/resolveField'
@@ -16,6 +15,7 @@ test('should resolve a Field containing only one variable', async t => {
     }]
   }
   const res = resolveField(ast, getFakeContext())
+  t.plan(2)
   await t.notThrows(res)
   return res.then( r => {
     t.is(r, 42)
@@ -33,6 +33,7 @@ test('should replace the correct portion of a string', async t => {
     }]
   }
   const res = resolveField(ast, getFakeContext())
+  t.plan(2)
   await t.notThrows(res)
   return res.then( r => {
     t.is(r, 'answer: 42 ')
@@ -55,6 +56,7 @@ test('should resolve a Field that contains multiple variables', async t => {
     }]
   }
   const res = resolveField(ast, getFakeContext())
+  t.plan(2)
   await t.notThrows(res)
   return res.then( r => {
     t.is(r, '42 != 4')
@@ -92,6 +94,7 @@ test(
       }]
     }
     const res = resolveField(ast, getFakeContext())
+    t.plan(2)
     await t.notThrows(res)
     return res.then( r => {
       t.is(r, 'bar = 42; bar')
@@ -125,14 +128,13 @@ function getFakeContext(): Context {
           case 'foo.bar':
             return Promise.resolve(42)
           case 'foo.baz':
-            return Promise.reject(
-              new ResolveError('', undefined, ResolveErrorType.WAITING))
+            return Promise.reject(new DependencyError(''))
           case 'foo.num':
             return Promise.resolve(4)
           case 'foo.ref':
             return Promise.resolve('bar')
           default:
-            return Promise.reject(new ResolveError(`Cannot find field ${name}`))
+            return Promise.reject(new FatalError(`Cannot find field ${name}`))
         }
       }
     }

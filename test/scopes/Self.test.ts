@@ -1,12 +1,12 @@
 import test from 'ava'
-import ResolveError from '../../src/lib/ResolveError'
-import { ResolveErrorType } from '../../src/lib/ResolveError'
+import { DependencyError, FatalError } from '../../src/lib/errors'
 import { Context, FieldAST, ObjectMap } from '../../src/lib/types'
 
 import Self from '../../src/scopes/Self'
 
 test('should return the value when the path points to a resolved field', t => {
   const res = Self.resolve('foo.baz', getFakeContext())
+  t.plan(1)
   return res.then( r => {
     t.is(r, 42)
   })
@@ -16,16 +16,15 @@ test(
   'should return a WAITING ResolveError when the path points to an unresolved field',
   async t => {
     const err = await t.throws(Self.resolve('fuu.bar', getFakeContext()))
-    t.true(err instanceof ResolveError)
-    t.is((err as ResolveError).errorType, ResolveErrorType.WAITING)
+    t.true(err instanceof DependencyError)
   })
 
 test(
   'should return a FATAL ResolveError when the path points to a non-existent field',
   async t => {
+    t.plan(2)
     const err = await t.throws(Self.resolve('fuu.nonexistent', getFakeContext()))
-    t.true(err instanceof ResolveError)
-    t.is((err as ResolveError).errorType, ResolveErrorType.FATAL)
+    t.true(err instanceof FatalError)
   })
 
 function getFakeContext(): Context {
