@@ -6,6 +6,7 @@ import Self from '../../src/scopes/Self'
 
 test('should return the value when the path points to a resolved field', t => {
   const res = Self.resolve('foo.baz', getFakeContext())
+  t.plan(1)
   return res.then( r => {
     t.is(r, 42)
   })
@@ -21,6 +22,7 @@ test(
 test(
   'should return a FATAL ResolveError when the path points to a non-existent field',
   async t => {
+    t.plan(2)
     const err = await t.throws(Self.resolve('fuu.nonexistent', getFakeContext()))
     t.true(err instanceof FatalError)
   })

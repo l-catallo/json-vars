@@ -58,6 +58,7 @@ testCases.forEach( c => {
   const expected = c[2] as ObjectMap<any>
   test(description, async t => {
     const res = resolveConfig(input, getScopes(), getTransformers())
+    t.plan(2)
     await t.notThrows(res)
     return res.then( r => {
       t.deepEqual(r, expected);
@@ -69,6 +70,7 @@ test('should throw a FATAL ResolveError if there is a dependency lock', t => {
   const input = {
     foo: '${dummy:waiting}'
   }
+  t.plan(1)
   return t.throws(resolveConfig(input, getScopes(), getTransformers()), FatalError)
 })
 
@@ -76,6 +78,7 @@ test('should throw ResolveErrors returned by the variables', t => {
   const input = {
     foo: '${dummy:fatal}'
   }
+  t.plan(1)
   return t.throws(resolveConfig(input, getScopes(), getTransformers()), FatalError)
 })
 

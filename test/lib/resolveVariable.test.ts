@@ -12,6 +12,7 @@ test('should resolve a simple variable', async t => {
     transformers: [],
   }
   const res = resolveVariable(variable, getFakeContext())
+  t.plan(2)
   await t.notThrows(res)
   return res.then( r => {
     t.is(r, 'baz')
@@ -29,6 +30,7 @@ test('should resolve a variable with a single transformer', async t => {
     }],
   }
   const res = resolveVariable(variable, getFakeContext())
+  t.plan(2)
   await t.notThrows(res)
   return res.then( r => {
     t.is(r, 'BAZ')
@@ -49,6 +51,7 @@ test('should resolve Transformers in the correct order', async t => {
     }],
   }
   const res = resolveVariable(variable, getFakeContext())
+  t.plan(2)
   await t.notThrows(res)
   return res.then( r => {
     t.is(r, 'helloworld')
@@ -71,6 +74,7 @@ test('should resolve a Variable that has a FieldAST in the name', async t => {
     transformers: [],
   }
   const res = resolveVariable(variable, getFakeContext())
+  t.plan(2)
   await t.notThrows(res)
   return res.then( r => {
     t.is(r, 'baz')
@@ -86,6 +90,7 @@ test(
       name: 'somename',
       transformers: [],
     }
+    t.plan(2)
     const err = await t.throws(resolveVariable(variable, getFakeContext()))
     t.true(err instanceof FatalError)
   })
@@ -97,6 +102,7 @@ test('should pass on ResolveErrors coming from the scope', async t => {
     name: 'foo.biz',
     transformers: [],
   }
+  t.plan(2)
   const err = await t.throws(resolveVariable(variable, getFakeContext()))
   t.true(err instanceof DependencyError)
 })

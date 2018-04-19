@@ -10,6 +10,7 @@ test('should resolve a simple transformer', async t => {
     args: [],
   }
   const fn = resolveTransformer(transformer, getFakeContext())
+  t.plan(3)
   t.true(fn instanceof Function)
   const res = fn(Promise.resolve('foo'))
   await t.notThrows(res)
@@ -24,6 +25,7 @@ test('should pass all the arguments to the Transformer', async t => {
     args: ['hello ', 'world'],
   }
   const fn = resolveTransformer(transformer, getFakeContext())
+  t.plan(3)
   t.true(fn instanceof Function)
   const res = fn(Promise.resolve(42))
   await t.notThrows(res)
@@ -46,6 +48,7 @@ test('should resolve a non-leaf Transformer', async t => {
     }],
   }
   const fn = resolveTransformer(transformer, getFakeContext())
+  t.plan(3)
   t.true(fn instanceof Function)
   const res = fn(Promise.resolve(42))
   await t.notThrows(res)
@@ -61,9 +64,8 @@ test(
       name: 'nonexistenttransformer',
       args: [],
     }
-    const err = t.throws(
-      () => resolveTransformer(transformer, getFakeContext()),
-      FatalError )
+    t.plan(1)
+    t.throws(() => resolveTransformer(transformer, getFakeContext()), FatalError)
   })
 
 test('should pass on Rejections returned by the Transformer', async t => {
@@ -72,7 +74,8 @@ test('should pass on Rejections returned by the Transformer', async t => {
     args: [],
   }
   const fn = await resolveTransformer(transformer, getFakeContext())
-  const err = await t.throws(fn(Promise.resolve('')), FatalError)
+  t.plan(1)
+  await t.throws(fn(Promise.resolve('')), FatalError)
 })
 
 function getFakeContext(): Context {
