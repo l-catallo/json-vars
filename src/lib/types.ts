@@ -23,12 +23,11 @@ export interface Scope {
 
 export type Value = number | string | boolean
 
-export interface Transformer {
-  transform: (
-    value: Promise<Value>,
-    ...args: Value[]
-  ) => Promise<Value>
-}
+export type Transformer = (
+  value: Promise<Value>,
+  ...args: Value[]
+) => Promise<Value>
+
 
 export interface LeafVariableAST extends VariableAST {
   match: string,

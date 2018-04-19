@@ -98,29 +98,23 @@ function getFakeContext(): Context {
     }
   }
   const transformers = {
-    capitalize: {
-      transform(
-        value: Promise<Value>,
-        ...args: Value[]
-      ): Promise<Value> {
-        return value.then( v => v.toString().toUpperCase() )
-      }
+    capitalize(
+      value: Promise<Value>,
+      ...args: Value[]
+    ): Promise<Value> {
+      return value.then( v => v.toString().toUpperCase() )
     },
-    concat: {
-      transform(
-        value: Promise<Value>,
-        ...args: Value[]
-      ): Promise<Value> {
-        return Promise.resolve(args.join(''))
-      }
+    concat(
+      value: Promise<Value>,
+      ...args: Value[]
+    ): Promise<Value> {
+      return Promise.resolve(args.join(''))
     },
-    error: {
-      transform(
-        value: Promise<Value>,
-        ...args: Value[]
-      ): Promise<Value> {
-        return Promise.reject(new FatalError(''))
-      }
+    error(
+      value: Promise<Value>,
+      ...args: Value[]
+    ): Promise<Value> {
+      return Promise.reject(new FatalError(''))
     }
   }
   return {

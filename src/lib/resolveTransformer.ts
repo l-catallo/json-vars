@@ -29,7 +29,7 @@ export default function resolveTransformer(
       }
     })
     return Promise.all(argsPromises).then( args => {
-      return transformer.transform(value, ...args)
+      return transformer(value, ...args)
     })
   }
 }

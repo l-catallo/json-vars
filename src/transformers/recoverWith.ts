@@ -1,12 +1,8 @@
 import { FatalError } from '../lib/errors'
 import { Transformer, Value } from '../lib/types'
 
-export const Default: Transformer = {
-
-  transform(
-    value: Promise<Value>,
-    ...args: Value[]
-  ): Promise<Value> {
+export const recoverWith: Transformer =
+  function ( value: Promise<Value>, ...args: Value[] ): Promise<Value> {
     const d = args[0]
     if ( d === undefined ) {
       const msg = 'The `default` transformer needs one argument'
@@ -17,6 +13,5 @@ export const Default: Transformer = {
     })
   }
 
-}
 
-export default Default
+export default recoverWith
