@@ -23,7 +23,7 @@ export interface Scope {
   resolve: ( name: string, ctx: Context ) => Promise<Value>
 }
 
-export type Value = number | string | null
+export type Value = number | string | boolean
 
 export interface Transformer {
   transform: (

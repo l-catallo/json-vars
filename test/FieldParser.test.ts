@@ -50,24 +50,89 @@ const testCases = [
     }
   ],
 
-  [ 'should parse transformers with arguments',
-    'some ${self:foo.bar|ellipsize(30)|concat("baz")}string',
+  [ 'should parse transformers with number arguments',
+    'some ${self:foo.bar|ellipsize(30)|transform(4.2)}string',
     {
-      raw: 'some ${self:foo.bar|ellipsize(30)|concat("baz")}string',
+      raw: 'some ${self:foo.bar|ellipsize(30)|transform(4.2)}string',
       variables: [{
-        match: '${self:foo.bar|ellipsize(30)|concat("baz")}',
+        match: '${self:foo.bar|ellipsize(30)|transform(4.2)}',
         name: 'foo.bar',
         scope: 'self',
         transformers: [{
           name: 'ellipsize',
           args: [30],
         }, {
-          name: 'concat',
-          args: ['baz'],
+          name: 'transform',
+          args: [4.2],
         }],
       }],
     }
   ],
+
+  [ 'should parse transformers with boolean arguments',
+    'some ${self:foo.bar|transform(true,false)}string',
+    {
+      raw: 'some ${self:foo.bar|transform(true,false)}string',
+      variables: [{
+        match: '${self:foo.bar|transform(true,false)}',
+        name: 'foo.bar',
+        scope: 'self',
+        transformers: [{
+          name: 'transform',
+          args: [true, false],
+        }],
+      }],
+    }
+  ],
+
+  [ 'should not parse `true` and `false` as booleans if inside a bigger string',
+    'some ${self:foo.bar|transform(non_bool_true,falsey)}string',
+    {
+      raw: 'some ${self:foo.bar|transform(non_bool_true,falsey)}string',
+      variables: [{
+        match: '${self:foo.bar|transform(non_bool_true,falsey)}',
+        name: 'foo.bar',
+        scope: 'self',
+        transformers: [{
+          name: 'transform',
+          args: ['non_bool_true', 'falsey'],
+        }],
+      }],
+    }
+  ],
+
+  [ 'should parse transformers with quoted string arguments',
+    'some ${self:foo.bar|transform("true,false")}string',
+    {
+      raw: 'some ${self:foo.bar|transform("true,false")}string',
+      variables: [{
+        match: '${self:foo.bar|transform("true,false")}',
+        name: 'foo.bar',
+        scope: 'self',
+        transformers: [{
+          name: 'transform',
+          args: ['true,false'],
+        }],
+      }],
+    }
+  ],
+
+  [ 'should parse transformers with string arguments',
+    'some ${self:foo.bar|transform(some_string,string2)}string',
+    {
+      raw: 'some ${self:foo.bar|transform(some_string,string2)}string',
+      variables: [{
+        match: '${self:foo.bar|transform(some_string,string2)}',
+        name: 'foo.bar',
+        scope: 'self',
+        transformers: [{
+          name: 'transform',
+          args: ['some_string','string2'],
+        }],
+      }],
+    }
+  ],
+
 
   [ 'should parse multiple variables in the same string',
     'some ${env:ENV}random ${self:foo.bar}string${env:BUILD}',

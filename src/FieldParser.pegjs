@@ -54,7 +54,7 @@ ArgsList
   = head: Argument ',' tail:ArgsList { return [head, ...tail] }
   / a:Argument { return [a] }
 
-Argument = Number / QuotedString / ComplexArgument / SimpleArgument
+Argument = Boolean / Number / QuotedString / ComplexArgument / SimpleArgument
 
 ComplexArgument
   = SimpleArgument? head:Variable tail:ComplexArgument { return {
@@ -67,6 +67,10 @@ ComplexArgument
   }}
 
 SimpleArgument = $(NonSpecialChar)+
+
+Boolean
+  = 'true' !NonSpecialChar { return true }
+  / 'false' !NonSpecialChar { return false }
 
 Number
   = [0-9]+ { return parseInt(text()) }

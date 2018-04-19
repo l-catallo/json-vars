@@ -33,14 +33,32 @@ test('should ignore a config that does not contain variables', async t => {
   return res.then( o => t.is(obj, o) )
 })
 
-test('should resolve a simple variable', async t => {
+test('should resolve simple variables', async t => {
   const obj = {
     foo: '${env:FOO}',
-    bar: 42,
+    src: {
+      str: 'hello',
+      num: 42,
+      bool: true,
+    },
+    bar: {
+      str: '${self:src.str}',
+      num: '${self:src.num}',
+      bool: '${self:src.bool}',
+    },
   }
   const expected = {
     foo: 'bar',
-    bar: 42,
+    src: {
+      str: 'hello',
+      num: 42,
+      bool: true,
+    },
+    bar: {
+      str: 'hello',
+      num: 42,
+      bool: true,
+    },
   }
   const res = t.context.solver.resolve(obj)
   t.plan(2)
