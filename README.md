@@ -33,14 +33,8 @@ jVars.resolve(config).then( res => console.log(res) )
 ###### Variable
 ![Variable syntax diagram](./assets/Variable.svg)
 
-###### TransformersList
-![TransformersList syntax diagram](./assets/TransformersList.svg)
-
 ###### Transformer
 ![Transformer syntax diagram](./assets/Transformer.svg)
-
-###### ArgumentsList
-![ArgumentsList syntax diagram](./assets/ArgumentsList.svg)
 
 Scope, Variable and Transformer's names can contain any letter,
 number, `-`, `.` or `_`.

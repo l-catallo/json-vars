@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="railroad-diagram" width="433" height="72" viewBox="0 0 433 72">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="railroad-diagram" width="433" height="102" viewBox="0 0 433 102">
 <defs><style type="text/css"><![CDATA[ svg.railroad-diagram {
   background-color: rgba(255,255,255,0);
 }
@@ -64,8 +64,34 @@ svg.railroad-diagram rect {
 <g>
 <path d="M190 41h0"></path>
 <path d="M314 41h0"></path>
-<rect x="190" y="30" width="124" height="22"></rect>
-<text x="252" y="45">ArgumentsList</text>
+<path d="M190 41h10"></path>
+<g>
+<path d="M200 41h0"></path>
+<path d="M304 41h0"></path>
+<path d="M200 41h10"></path>
+<g>
+<path d="M210 41h0"></path>
+<path d="M294 41h0"></path>
+<rect x="210" y="30" width="84" height="22"></rect>
+<text x="252" y="45">Argument</text>
+</g>
+<path d="M294 41h10"></path>
+</g>
+<path d="M304 41h10"></path>
+<path d="M200 41a10 10 0 0 0 -10 10v10a10 10 0 0 0 10 10"></path>
+<g>
+<path d="M200 71h28"></path>
+<path d="M276 71h28"></path>
+<path d="M228 71h10"></path>
+<g>
+<path d="M238 71h0"></path>
+<path d="M266 71h0"></path>
+<rect x="238" y="60" width="28" height="22" rx="10" ry="10"></rect>
+<text x="252" y="75">,</text>
+</g>
+<path d="M266 71h10"></path>
+</g>
+<path d="M304 71a10 10 0 0 0 10 -10v-10a10 10 0 0 0 -10 -10"></path>
 </g>
 <path d="M314 41h10"></path>
 <path d="M324 41h10"></path>
