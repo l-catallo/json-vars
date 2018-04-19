@@ -73,8 +73,8 @@ Boolean
   / 'false' !NonSpecialChar { return false }
 
 Number
-  = [0-9]+ { return parseInt(text()) }
-  / [0-9]+ '.' [0-9]+ { return parseFloat(text()) }
+  = [0-9]+ '.' [0-9]+ { return parseFloat(text()) }
+  / [0-9]+ { return parseInt(text()) }
 
 QuotedString
   = "'" str:$[^']+ "'" { return str }
