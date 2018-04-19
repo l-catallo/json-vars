@@ -1,6 +1,5 @@
 import test from 'ava'
-import ResolveError from '../../src/lib/ResolveError'
-import { ResolveErrorType } from '../../src/lib/ResolveError'
+import { DependencyError, FatalError } from '../../src/lib/errors'
 import { Context, ObjectMap, Scope, Transformer, Value } from '../../src/lib/types'
 
 import resolveConfig from '../../src/lib/resolveConfig'
@@ -70,14 +69,14 @@ test('should throw a FATAL ResolveError if there is a dependency lock', t => {
   const input = {
     foo: '${dummy:waiting}'
   }
-  return t.throws(resolveConfig(input, getScopes(), getTransformers()), ResolveError)
+  return t.throws(resolveConfig(input, getScopes(), getTransformers()), FatalError)
 })
 
 test('should throw ResolveErrors returned by the variables', t => {
   const input = {
     foo: '${dummy:fatal}'
   }
-  return t.throws(resolveConfig(input, getScopes(), getTransformers()), ResolveError)
+  return t.throws(resolveConfig(input, getScopes(), getTransformers()), FatalError)
 })
 
 function getScopes(): ObjectMap<Scope> {
@@ -93,14 +92,14 @@ function getScopes(): ObjectMap<Scope> {
           case 'waiting':
             if (waiting) {
               waiting = false
-              const err = new ResolveError('waiting', undefined, ResolveErrorType.WAITING)
+              const err = new DependencyError('waiting')
               return Promise.reject(err)
             } else {
               return Promise.resolve('done')
             }
           case 'fatal':
           default:
-            return Promise.reject(new ResolveError(`Cannot find ${name}`))
+            return Promise.reject(new FatalError(`Cannot find ${name}`))
         }
       }
     }

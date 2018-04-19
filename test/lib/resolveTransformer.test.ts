@@ -1,6 +1,5 @@
 import test from 'ava'
-import ResolveError from '../../src/lib/ResolveError'
-import { ResolveErrorType } from '../../src/lib/ResolveError'
+import { DependencyError, FatalError } from '../../src/lib/errors'
 import { Context, LeafTransformerAST, TransformerAST, Value } from '../../src/lib/types'
 
 import resolveTransformer from '../../src/lib/resolveTransformer'
@@ -64,8 +63,7 @@ test(
     }
     const err = t.throws(
       () => resolveTransformer(transformer, getFakeContext()),
-      ResolveError )
-    t.is((err as ResolveError).errorType, ResolveErrorType.FATAL)
+      FatalError )
   })
 
 test('should pass on Rejections returned by the Transformer', async t => {
@@ -74,8 +72,7 @@ test('should pass on Rejections returned by the Transformer', async t => {
     args: [],
   }
   const fn = await resolveTransformer(transformer, getFakeContext())
-  const err = await t.throws(fn(Promise.resolve('')), ResolveError)
-  t.is((err as ResolveError).errorType, ResolveErrorType.FATAL)
+  const err = await t.throws(fn(Promise.resolve('')), FatalError)
 })
 
 function getFakeContext(): Context {
@@ -92,7 +89,7 @@ function getFakeContext(): Context {
           case 'foo.name':
             return Promise.resolve('John')
           default:
-            return Promise.reject(new ResolveError(`Cannot find field ${name}`))
+            return Promise.reject(new FatalError(`Cannot find field ${name}`))
         }
       }
     }
@@ -119,7 +116,7 @@ function getFakeContext(): Context {
         value: Promise<Value>,
         ...args: Value[]
       ): Promise<Value> {
-        return Promise.reject(new ResolveError(''))
+        return Promise.reject(new FatalError(''))
       }
     }
   }

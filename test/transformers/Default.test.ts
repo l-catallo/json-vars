@@ -1,5 +1,5 @@
 import test from 'ava'
-import { ResolveError, ResolveErrorType } from '../../src/lib/ResolveError'
+import { FatalError } from '../../src/lib/errors'
 
 import Default from '../../src/transformers/Default'
 
@@ -16,6 +16,5 @@ test('should recover a failed Promise and return the provided argument', t => {
 })
 
 test('should throw a FATAL ResolveError if no argument is provided', async t => {
-  const err = await t.throws(Default.transform(Promise.resolve('')), ResolveError)
-  t.is((err as ResolveError).errorType, ResolveErrorType.FATAL)
+  await t.throws(Default.transform(Promise.resolve('')), FatalError)
 })

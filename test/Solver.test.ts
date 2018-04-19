@@ -1,5 +1,5 @@
 import test from 'ava'
-import { ResolveError, ResolveErrorType } from '../src/lib/ResolveError'
+import { FatalError } from '../src/lib/errors'
 
 import Solver from '../src/Solver'
 
@@ -12,7 +12,7 @@ test.beforeEach(t => {
             case 'FOO':
               return 'bar'
             default:
-              throw new ResolveError('')
+              throw new FatalError('')
           }
         }
       }
@@ -90,7 +90,6 @@ test('should detect dependency loops and fail', async t => {
     baz: '${self:foo}',
   }
   const res = t.context.solver.resolve(obj)
-  t.plan(2)
-  const err = await t.throws(res, ResolveError)
-  t.is((err as ResolveError).errorType, ResolveErrorType.FATAL)
+  t.plan(1)
+  const err = await t.throws(res, FatalError)
 })

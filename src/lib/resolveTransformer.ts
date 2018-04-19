@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
 import isFieldAST from './isFieldAST'
-import ResolveError from './ResolveError'
+import { FatalError } from './errors'
 import resolveField from './resolveField'
 import { Context, TransformerAST, Value } from './types'
 
@@ -18,7 +18,7 @@ export default function resolveTransformer(
 ): (v: Promise<Value>) => Promise<Value> {
   const transformer = ctx.transformers[ast.name]
   if ( transformer === undefined ) {
-    throw new ResolveError(`Cannot find Transformer ${ast.name}`)
+    throw new FatalError(`Cannot find Transformer ${ast.name}`)
   }
   return async value => {
     const argsPromises = ast.args.map( arg => {

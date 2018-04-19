@@ -1,4 +1,4 @@
-import ResolveError from '../lib/ResolveError'
+import { FatalError } from '../lib/errors'
 import { ObjectMap, Scope, Value } from '../lib/types'
 
 export class Env implements Scope {
@@ -17,7 +17,7 @@ export class Env implements Scope {
     if ( this.env[name] !== undefined ) {
       return this.env[name]
     } else {
-      throw new ResolveError(`the environment variable ${name} is not defined`)
+      throw new FatalError(`the environment variable ${name} is not defined`)
     }
   }
 

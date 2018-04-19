@@ -1,6 +1,5 @@
 import test from 'ava'
-import ResolveError from '../../src/lib/ResolveError'
-import { ResolveErrorType } from '../../src/lib/ResolveError'
+import { DependencyError, FatalError } from '../../src/lib/errors'
 import { Context, FieldAST, Value } from '../../src/lib/types'
 
 import resolveField from '../../src/lib/resolveField'
@@ -125,14 +124,13 @@ function getFakeContext(): Context {
           case 'foo.bar':
             return Promise.resolve(42)
           case 'foo.baz':
-            return Promise.reject(
-              new ResolveError('', undefined, ResolveErrorType.WAITING))
+            return Promise.reject(new DependencyError(''))
           case 'foo.num':
             return Promise.resolve(4)
           case 'foo.ref':
             return Promise.resolve('bar')
           default:
-            return Promise.reject(new ResolveError(`Cannot find field ${name}`))
+            return Promise.reject(new FatalError(`Cannot find field ${name}`))
         }
       }
     }

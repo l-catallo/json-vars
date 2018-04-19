@@ -1,5 +1,3 @@
-import ResolveError from './ResolveError'
-
 export interface FieldAST {
   raw: string,
   variables: VariableAST[],

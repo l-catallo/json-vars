@@ -1,6 +1,5 @@
 import test from 'ava'
-import ResolveError from '../../src/lib/ResolveError'
-import { ResolveErrorType } from '../../src/lib/ResolveError'
+import { DependencyError, FatalError } from '../../src/lib/errors'
 import { Context, LeafVariableAST, Value, VariableAST } from '../../src/lib/types'
 
 import resolveVariable from '../../src/lib/resolveVariable'
@@ -88,8 +87,7 @@ test(
       transformers: [],
     }
     const err = await t.throws(resolveVariable(variable, getFakeContext()))
-    t.true(err instanceof ResolveError)
-    t.is((err as ResolveError).errorType, ResolveErrorType.FATAL)
+    t.true(err instanceof FatalError)
   })
 
 test('should pass on ResolveErrors coming from the scope', async t => {
@@ -100,8 +98,7 @@ test('should pass on ResolveErrors coming from the scope', async t => {
     transformers: [],
   }
   const err = await t.throws(resolveVariable(variable, getFakeContext()))
-  t.true(err instanceof ResolveError)
-  t.is((err as ResolveError).errorType, ResolveErrorType.WAITING)
+  t.true(err instanceof DependencyError)
 })
 
 function getFakeContext(): Context {
@@ -147,10 +144,9 @@ function getFakeContext(): Context {
           case 'foo.baz':
           case 'foo.biz':
             const msg = `Field ${name} is not yet resolved`
-            const error = new ResolveError(msg, undefined, ResolveErrorType.WAITING)
-            return Promise.reject(error)
+            return Promise.reject(new DependencyError(msg))
           default:
-            return Promise.reject(new ResolveError('Cannot find foo.biz'))
+            return Promise.reject(new FatalError('Cannot find foo.biz'))
         }
       }
     }

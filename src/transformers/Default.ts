@@ -1,4 +1,4 @@
-import ResolveError from '../lib/ResolveError'
+import { FatalError } from '../lib/errors'
 import { Transformer, Value } from '../lib/types'
 
 export const Default: Transformer = {
@@ -9,8 +9,8 @@ export const Default: Transformer = {
   ): Promise<Value> {
     const d = args[0]
     if ( d === undefined ) {
-      const error = new ResolveError('The `default` transformer needs one argument')
-      return Promise.reject(error)
+      const msg = 'The `default` transformer needs one argument'
+      return Promise.reject(new FatalError(msg))
     }
     return value.catch( e => {
       return d
