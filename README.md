@@ -79,3 +79,19 @@ References another property of the current input object.
 
 ###### `default(defaultValue)`
 Recover failures and return `defaultValue`, otherwise it has no effect.
+
+## Running the tests
+
+To run tests:
+
+```sh
+npm test
+```
+
+### And coding style tests
+
+Run [NSP](https://nodesecurity.io/) and [TSLint](https://palantir.github.io/tslint/)
+
+```sh
+npm run lint
+```
