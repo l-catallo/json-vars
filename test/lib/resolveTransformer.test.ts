@@ -6,8 +6,8 @@ import resolveTransformer from '../../src/lib/resolveTransformer'
 
 test('should resolve a simple transformer', async t => {
   const transformer: LeafTransformerAST = {
-    name: 'capitalize',
     args: [],
+    name: 'capitalize',
   }
   const fn = resolveTransformer(transformer, getFakeContext())
   t.plan(3)
@@ -21,8 +21,8 @@ test('should resolve a simple transformer', async t => {
 
 test('should pass all the arguments to the Transformer', async t => {
   const transformer: LeafTransformerAST = {
-    name: 'concat',
     args: ['hello ', 'world'],
+    name: 'concat',
   }
   const fn = resolveTransformer(transformer, getFakeContext())
   t.plan(3)
@@ -36,16 +36,16 @@ test('should pass all the arguments to the Transformer', async t => {
 
 test('should resolve a non-leaf Transformer', async t => {
   const transformer: TransformerAST = {
-    name: 'concat',
     args: ['hello ', {
       raw: '${self:foo.name}',
       variables: [{
         match: '${self:foo.name}',
-        scope: 'self',
         name: 'foo.name',
+        scope: 'self',
         transformers: [],
       }],
     }],
+    name: 'concat',
   }
   const fn = resolveTransformer(transformer, getFakeContext())
   t.plan(3)
@@ -61,8 +61,8 @@ test(
   'should return a FATAL ResolveError if the the transformer is not defined in the Context',
   t => {
     const transformer: LeafTransformerAST = {
-      name: 'nonexistenttransformer',
       args: [],
+      name: 'nonexistenttransformer',
     }
     t.plan(1)
     t.throws(() => resolveTransformer(transformer, getFakeContext()), FatalError)
@@ -70,8 +70,8 @@ test(
 
 test('should pass on Rejections returned by the Transformer', async t => {
   const transformer: LeafTransformerAST = {
-    name: 'error',
     args: [],
+    name: 'error',
   }
   const fn = await resolveTransformer(transformer, getFakeContext())
   t.plan(1)
@@ -94,32 +94,32 @@ function getFakeContext(): Context {
           default:
             return Promise.reject(new FatalError(`Cannot find field ${name}`))
         }
-      }
-    }
+      },
+    },
   }
   const transformers = {
     capitalize(
       value: Promise<Value>,
-      ...args: Value[]
+      ...args: Value[],
     ): Promise<Value> {
       return value.then( v => v.toString().toUpperCase() )
     },
     concat(
       value: Promise<Value>,
-      ...args: Value[]
+      ...args: Value[],
     ): Promise<Value> {
       return Promise.resolve(args.join(''))
     },
     error(
       value: Promise<Value>,
-      ...args: Value[]
+      ...args: Value[],
     ): Promise<Value> {
       return Promise.reject(new FatalError(''))
-    }
+    },
   }
   return {
-    original,
     asts,
+    original,
     scopes,
     transformers,
   }

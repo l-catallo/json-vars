@@ -1,5 +1,5 @@
-import { LeafVariableAST, VariableAST } from './types'
 import isFieldAST from './isFieldAST'
+import { LeafVariableAST, VariableAST } from './types'
 
 /**
  * Check if a variable has no other variable in its name or
@@ -9,7 +9,7 @@ import isFieldAST from './isFieldAST'
  * @returns {boolean}
  */
 export default function isLeaf(
-  variable: VariableAST
+  variable: VariableAST,
 ): variable is LeafVariableAST {
   return (
     !isFieldAST(variable.name) &&

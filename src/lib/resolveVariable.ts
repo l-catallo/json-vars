@@ -1,10 +1,10 @@
 import { compose as composeFn, identity } from 'lodash/fp'
+import { FatalError } from './errors'
 import isFieldAST from './isFieldAST'
 import isLeaf from './isLeaf'
 import resolveField from './resolveField'
-import { FatalError } from './errors'
 import resolveTransformer from './resolveTransformer'
-import { Context, Value, TransformerAST, VariableAST } from './types'
+import { Context, TransformerAST, Value, VariableAST } from './types'
 
 /**
  * Takes a Variable's AST and tries to resolve it looking at the Context
@@ -15,7 +15,7 @@ import { Context, Value, TransformerAST, VariableAST } from './types'
  */
 export default async function resolveVariable(
   ast: VariableAST,
-  ctx: Context
+  ctx: Context,
 ): Promise<Value> {
   const scope = ctx.scopes[ast.scope]
   if (scope === undefined) {

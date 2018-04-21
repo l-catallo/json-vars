@@ -10,7 +10,7 @@ test('should recognise a valid object', t => {
       name: 'ENV',
       scope: 'env',
       transformers: [],
-    }]
+    }],
   }))
 })
 

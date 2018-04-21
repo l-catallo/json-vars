@@ -1,5 +1,5 @@
-import test from 'ava';
-import { parse } from '../src/FieldParser';
+import test from 'ava'
+import { parse } from '../src/FieldParser'
 
 /* Test cases are organized in arrays with the following structure
  * [ <description>, <input string>, <expected result> ]
@@ -18,7 +18,7 @@ const testCases = [
         scope: 'env',
         transformers: [],
       }],
-    }
+    },
   ],
 
   [ 'should parse a variable in the middle of a string',
@@ -31,7 +31,7 @@ const testCases = [
         scope: 'self',
         transformers: [],
       }],
-    }
+    },
   ],
 
   [ 'should parse a simple transformer',
@@ -43,11 +43,11 @@ const testCases = [
         name: 'foo.bar',
         scope: 'self',
         transformers: [{
-          name: 'capitalize',
           args: [],
+          name: 'capitalize',
         }],
       }],
-    }
+    },
   ],
 
   [ 'should parse transformers with number arguments',
@@ -59,14 +59,14 @@ const testCases = [
         name: 'foo.bar',
         scope: 'self',
         transformers: [{
-          name: 'ellipsize',
           args: [30],
+          name: 'ellipsize',
         }, {
-          name: 'transform',
           args: [4.2],
+          name: 'transform',
         }],
       }],
-    }
+    },
   ],
 
   [ 'should parse transformers with boolean arguments',
@@ -78,11 +78,11 @@ const testCases = [
         name: 'foo.bar',
         scope: 'self',
         transformers: [{
-          name: 'transform',
           args: [true, false],
+          name: 'transform',
         }],
       }],
-    }
+    },
   ],
 
   [ 'should not parse `true` and `false` as booleans if inside a bigger string',
@@ -94,11 +94,11 @@ const testCases = [
         name: 'foo.bar',
         scope: 'self',
         transformers: [{
-          name: 'transform',
           args: ['non_bool_true', 'falsey'],
+          name: 'transform',
         }],
       }],
-    }
+    },
   ],
 
   [ 'should parse transformers with quoted string arguments',
@@ -110,11 +110,11 @@ const testCases = [
         name: 'foo.bar',
         scope: 'self',
         transformers: [{
-          name: 'transform',
           args: ['true,false'],
+          name: 'transform',
         }],
       }],
-    }
+    },
   ],
 
   [ 'should parse transformers with string arguments',
@@ -126,13 +126,12 @@ const testCases = [
         name: 'foo.bar',
         scope: 'self',
         transformers: [{
+          args: ['some_string', 'string2'],
           name: 'transform',
-          args: ['some_string','string2'],
         }],
       }],
-    }
+    },
   ],
-
 
   [ 'should parse multiple variables in the same string',
     'some ${env:ENV}random ${self:foo.bar}string${env:BUILD}',
@@ -154,7 +153,7 @@ const testCases = [
         scope: 'env',
         transformers: [],
       }],
-    }
+    },
   ],
 
   [ 'should parse nested variables in a variable\'s name',
@@ -170,18 +169,18 @@ const testCases = [
             name: 'foo.bar',
             scope: 'self',
             transformers: [{
-              name: 'capitalize',
               args: [],
+              name: 'capitalize',
             }],
           }],
         },
         scope: 'env',
         transformers: [{
-          name: 'decode64',
           args: [],
+          name: 'decode64',
         }],
       }],
-    }
+    },
   ],
 
   [ 'should parse nested variables in a transformer\'s argument',
@@ -193,7 +192,6 @@ const testCases = [
         name: 'foo.number',
         scope: 'self',
         transformers: [{
-          name: 'repeat',
           args: [{
             raw: '${self:foo.repeats}',
             variables: [{
@@ -201,18 +199,18 @@ const testCases = [
               name: 'foo.repeats',
               scope: 'self',
               transformers: [],
-            }]
+            }],
           }],
-        }]
-      }]
-    }
+          name: 'repeat',
+        }],
+      }],
+    },
   ],
 
-];
+]
 
 testCases.forEach( c => {
   test(c[0] as string, t => {
-    t.deepEqual(parse(c[1] as string, {}), c[2]);
+    t.deepEqual(parse(c[1] as string, {}), c[2])
   })
 })
-

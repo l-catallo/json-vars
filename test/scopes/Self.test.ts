@@ -43,33 +43,33 @@ function getFakeContext(): Context {
       raw: '${self:fuu.bar}',
       variables: [{
         match: '${self:fuu.bar}',
-        scope: 'self',
         name: 'fuu.bar',
+        scope: 'self',
         transformers: [],
-      }]
+      }],
     },
     'fuu.bar': {
       raw: '${self:foo.baz}',
       variables: [{
         match: '${self:foo.baz}',
-        scope: 'self',
         name: 'foo.baz',
+        scope: 'self',
         transformers: [],
-      }]
+      }],
     },
     'fuu.baz': {
       raw: '${self:foo.nonexistent}',
       variables: [{
         match: '${self:foo.nonexistent}',
-        scope: 'self',
         name: 'foo.nonexistent',
+        scope: 'self',
         transformers: [],
-      }]
+      }],
     },
   }
   return {
-    original,
     asts,
+    original,
     scopes: {},
     transformers: {},
   }

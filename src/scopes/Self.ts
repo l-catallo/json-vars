@@ -14,7 +14,7 @@ export const Self: Scope = {
     } else {
       return value
     }
-  }
+  },
 
 }
 

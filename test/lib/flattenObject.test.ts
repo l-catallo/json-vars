@@ -7,7 +7,7 @@ test('should flatten a simple object', t => {
     foo: {
       bar: 'some string',
       baz: 42,
-    }
+    },
   }
   const expected = {
     'foo.bar': 'some string',
@@ -20,8 +20,8 @@ test('should flatten an object that contains an array', t => {
   const input = {
     foo: {
       bar: [ 'elem1', 'elem2' ],
-      baz: 42
-    }
+      baz: 42,
+    },
   }
   const expected = {
     'foo.bar[0]': 'elem1',

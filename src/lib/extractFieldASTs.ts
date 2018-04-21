@@ -1,7 +1,7 @@
-import { FieldAST, ObjectMap } from './types'
+import { parse } from '../FieldParser'
 import flattenObject from './flattenObject'
 import isFieldAST from './isFieldAST'
-import { parse } from '../FieldParser'
+import { FieldAST, ObjectMap } from './types'
 
 /**
  * Scans each property of an object, finds all the strings that contain
@@ -12,11 +12,11 @@ import { parse } from '../FieldParser'
  * @returns {ObjectMap<FieldAST>}
  */
 export default function extractFieldASTs(
-  obj: ObjectMap<any>
+  obj: ObjectMap<any>,
 ): ObjectMap<FieldAST> {
   const flattened = flattenObject(obj)
-  let fieldASTs = {}
-  for ( let path in flattened ) {
+  const fieldASTs = {}
+  for ( const path in flattened ) {
     if (typeof flattened[path] === 'string') {
       const ast = parse(flattened[path], {})
       if (isFieldAST(ast)) {
