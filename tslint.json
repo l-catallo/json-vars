@@ -21,6 +21,10 @@
         true,
         "spaces",
         2
+      ],
+      "interface-name": [
+        true,
+        "never-prefix"
       ]
     },
     "rulesDirectory": []

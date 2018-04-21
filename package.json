@@ -13,7 +13,7 @@
     "build": "npm run build-parser && tsc",
     "build-parser": "pegjs --plugin ./node_modules/ts-pegjs/src/tspegjs.js -o ./src/FieldParser.ts ./src/FieldParser.pegjs",
     "clean": "rm -rf dist ./src/FieldParser.ts",
-    "lint": "nsp check . && tslint -p . --force"
+    "lint": "nsp check . && tslint -p . -e src/FieldParser.ts --force"
   },
   "pre-commit": [
     "lint",
