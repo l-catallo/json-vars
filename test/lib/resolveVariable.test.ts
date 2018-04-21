@@ -7,8 +7,8 @@ import resolveVariable from '../../src/lib/resolveVariable'
 test('should resolve a simple variable', async t => {
   const variable: LeafVariableAST = {
     match: '${self:foo.bar}',
-    scope: 'self',
     name: 'foo.bar',
+    scope: 'self',
     transformers: [],
   }
   const res = resolveVariable(variable, getFakeContext())
@@ -22,11 +22,11 @@ test('should resolve a simple variable', async t => {
 test('should resolve a variable with a single transformer', async t => {
   const variable: LeafVariableAST = {
     match: '${self:foo.bar|capitalize}',
-    scope: 'self',
     name: 'foo.bar',
+    scope: 'self',
     transformers: [{
-      name: 'capitalize',
       args: [],
+      name: 'capitalize',
     }],
   }
   const res = resolveVariable(variable, getFakeContext())
@@ -40,14 +40,14 @@ test('should resolve a variable with a single transformer', async t => {
 test('should resolve Transformers in the correct order', async t => {
   const variable: LeafVariableAST = {
     match: '${self:foo.bar|capitalize|concat(hello,world)}',
-    scope: 'self',
     name: 'foo.bar',
+    scope: 'self',
     transformers: [{
-      name: 'capitalize',
       args: [],
+      name: 'capitalize',
     }, {
-      name: 'concat',
       args: ['hello', 'world'],
+      name: 'concat',
     }],
   }
   const res = resolveVariable(variable, getFakeContext())
@@ -61,16 +61,16 @@ test('should resolve Transformers in the correct order', async t => {
 test('should resolve a Variable that has a FieldAST in the name', async t => {
   const variable: VariableAST = {
     match: '${self:foo.${self:foo.ref}}',
-    scope: 'self',
     name: {
       raw: 'foo.${self:foo.ref}',
       variables: [{
         match: '${self:foo.ref}',
-        scope: 'self',
         name: 'foo.ref',
+        scope: 'self',
         transformers: [],
       }],
     },
+    scope: 'self',
     transformers: [],
   }
   const res = resolveVariable(variable, getFakeContext())
@@ -86,8 +86,8 @@ test(
   async t => {
     const variable: LeafVariableAST = {
       match: '${nonexistentscope:somename}',
-      scope: 'nonexistentscope',
       name: 'somename',
+      scope: 'nonexistentscope',
       transformers: [],
     }
     t.plan(2)
@@ -98,8 +98,8 @@ test(
 test('should pass on ResolveErrors coming from the scope', async t => {
   const variable: LeafVariableAST = {
     match: '${self:foo.biz}',
-    scope: 'self',
     name: 'foo.biz',
+    scope: 'self',
     transformers: [],
   }
   t.plan(2)
@@ -114,30 +114,30 @@ function getFakeContext(): Context {
       baz: '${self:foo.bar}',
       biz: '${self:foo.baz|capitalize}',
       ref: 'bar',
-    }
+    },
   }
   const asts = {
     'foo.baz': {
       raw: '${self:foo.bar}',
       variables: [{
         match: '${self:foo.bar}',
-        scope: 'self',
         name: 'foo.bar',
+        scope: 'self',
         transformers: [],
-      }]
+      }],
     },
     'foo.biz': {
       raw: '${self:foo.baz|capitalize}',
       variables: [{
         match: '${self:foo.baz|capitalize}',
-        scope: 'self',
         name: 'foo.baz',
+        scope: 'self',
         transformers: [{
+          args: [],
           name: 'capitalize',
-          args: []
         }],
-      }]
-    }
+      }],
+    },
   }
   const scopes = {
     self: {
@@ -154,27 +154,27 @@ function getFakeContext(): Context {
           default:
             return Promise.reject(new FatalError('Cannot find foo.biz'))
         }
-      }
-    }
+      },
+    },
   }
   const transformers = {
     capitalize(
       value: Promise<Value>,
-      ...args: Value[]
+      ...args: Value[],
     ): Promise<Value> {
       return value.then( v => v.toString().toUpperCase() )
     },
     concat(
       value: Promise<Value>,
-      ...args: Value[]
+      ...args: Value[],
     ): Promise<Value> {
       return Promise.resolve(args.join(''))
     },
   }
 
   return {
-    original,
     asts,
+    original,
     scopes,
     transformers,
   }

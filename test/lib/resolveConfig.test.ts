@@ -11,21 +11,21 @@ const testCases = [
 
   [ 'should leave unchanged a Config that has no variables',
     {
-      foo: 'bar',
       baz: {
         foo: {
           bar: 'bar',
           baz: 'baz',
         },
       },
+      foo: 'bar',
     }, {
-      foo: 'bar',
       baz: {
         foo: {
           bar: 'bar',
           baz: 'baz',
         },
       },
+      foo: 'bar',
     }],
 
   [ 'should resolve a simple Config',
@@ -43,11 +43,11 @@ const testCases = [
 
   [ 'should resolve a config with internal dependency',
     {
-      foo: '${dummy:waiting}',
       bar: '${dummy:string}',
+      foo: '${dummy:waiting}',
     }, {
-      foo: 'done',
       bar: 'hello',
+      foo: 'done',
     }],
 
 ]
@@ -61,14 +61,14 @@ testCases.forEach( c => {
     t.plan(2)
     await t.notThrows(res)
     return res.then( r => {
-      t.deepEqual(r, expected);
+      t.deepEqual(r, expected)
     })
   })
 })
 
 test('should throw a FATAL ResolveError if there is a dependency lock', t => {
   const input = {
-    foo: '${dummy:waiting}'
+    foo: '${dummy:waiting}',
   }
   t.plan(1)
   return t.throws(resolveConfig(input, getScopes(), getTransformers()), FatalError)
@@ -76,7 +76,7 @@ test('should throw a FATAL ResolveError if there is a dependency lock', t => {
 
 test('should throw ResolveErrors returned by the variables', t => {
   const input = {
-    foo: '${dummy:fatal}'
+    foo: '${dummy:fatal}',
   }
   t.plan(1)
   return t.throws(resolveConfig(input, getScopes(), getTransformers()), FatalError)
@@ -104,8 +104,8 @@ function getScopes(): ObjectMap<Scope> {
           default:
             return Promise.reject(new FatalError(`Cannot find ${name}`))
         }
-      }
-    }
+      },
+    },
   }
 }
 

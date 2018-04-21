@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
-import isFieldAST from './isFieldAST'
 import { FatalError } from './errors'
+import isFieldAST from './isFieldAST'
 import resolveField from './resolveField'
 import { Context, TransformerAST, Value } from './types'
 

@@ -12,7 +12,7 @@ import { Context, FieldAST, ObjectMap, Value } from './types'
  */
 export async function resolveField(
   ast: FieldAST,
-  ctx: Context
+  ctx: Context,
 ): Promise<Value> {
   // remove duplicate variables
   const variables = _.uniqBy(
@@ -21,15 +21,14 @@ export async function resolveField(
   const varsPromises = variables.map( v => {
     return resolveVariable(v, ctx).then( result => {
       return {
-        variable: v,
         result,
+        variable: v,
       }
     })
   })
   return Promise.all(varsPromises).then( vars => {
     let finalResult: Value = ast.raw as Value
-    for (let i=0; i<vars.length; i++) {
-      const {variable, result} = vars[i]
+    for (const {variable, result} of vars) {
       finalResult = replaceMatch(finalResult as string, variable.match, result)
     }
     return finalResult

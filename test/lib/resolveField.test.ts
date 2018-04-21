@@ -9,10 +9,10 @@ test('should resolve a Field containing only one variable', async t => {
     raw: '${self:foo.bar}',
     variables: [{
       match: '${self:foo.bar}',
-      scope: 'self',
       name: 'foo.bar',
+      scope: 'self',
       transformers: [],
-    }]
+    }],
   }
   const res = resolveField(ast, getFakeContext())
   t.plan(2)
@@ -27,10 +27,10 @@ test('should replace the correct portion of a string', async t => {
     raw: 'answer: ${self:foo.bar} ',
     variables: [{
       match: '${self:foo.bar}',
-      scope: 'self',
       name: 'foo.bar',
+      scope: 'self',
       transformers: [],
-    }]
+    }],
   }
   const res = resolveField(ast, getFakeContext())
   t.plan(2)
@@ -45,15 +45,15 @@ test('should resolve a Field that contains multiple variables', async t => {
     raw: '${self:foo.bar} != ${self:foo.num}',
     variables: [{
       match: '${self:foo.bar}',
-      scope: 'self',
       name: 'foo.bar',
+      scope: 'self',
       transformers: [],
     }, {
       match: '${self:foo.num}',
-      scope: 'self',
       name: 'foo.num',
+      scope: 'self',
       transformers: [],
-    }]
+    }],
   }
   const res = resolveField(ast, getFakeContext())
   t.plan(2)
@@ -70,28 +70,28 @@ test(
       raw: '${self:foo.ref} = ${self:foo.${self:foo.ref}}; ${self:foo.ref}',
       variables: [{
         match: '${self:foo.ref}',
-        scope: 'self',
         name: 'foo.ref',
+        scope: 'self',
         transformers: [],
       }, {
         match: '${self:foo.${self:foo.ref}}',
-        scope: 'self',
         name: {
           raw: 'foo.${self:foo.ref}',
           variables: [{
             match: '${self:foo.ref}',
-            scope: 'self',
             name: 'foo.ref',
+            scope: 'self',
             transformers: [],
           }],
         },
+        scope: 'self',
         transformers: [],
       }, {
         match: '${self:foo.ref}',
-        scope: 'self',
         name: 'foo.ref',
+        scope: 'self',
         transformers: [],
-      }]
+      }],
     }
     const res = resolveField(ast, getFakeContext())
     t.plan(2)
@@ -104,9 +104,9 @@ test(
 function getFakeContext(): Context {
   const original = {
     foo: {
-      num: 4,
       bar: 42,
       baz: '${self:foo.bar}',
+      num: 4,
       ref: 'bar',
     },
   }
@@ -115,10 +115,10 @@ function getFakeContext(): Context {
       raw: '${self:foo.bar}',
       variables: [{
         match: '${self:foo.bar}',
-        scope: 'self',
         name: 'foo.bar',
+        scope: 'self',
         transformers: [],
-      }]
+      }],
     },
   }
   const scopes = {
@@ -136,13 +136,13 @@ function getFakeContext(): Context {
           default:
             return Promise.reject(new FatalError(`Cannot find field ${name}`))
         }
-      }
-    }
+      },
+    },
   }
   const transformers = {}
   return {
-    original,
     asts,
+    original,
     scopes,
     transformers,
   }

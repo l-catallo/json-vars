@@ -25,9 +25,8 @@ export type Value = number | string | boolean
 
 export type Transformer = (
   value: Promise<Value>,
-  ...args: Value[]
+  ...args: Value[],
 ) => Promise<Value>
-
 
 export interface LeafVariableAST extends VariableAST {
   match: string,
@@ -58,4 +57,3 @@ export interface SolverOptions {
 export interface ObjectMap<T> {
   [key: string]: T
 }
-

@@ -2,7 +2,7 @@ import ResolveError from './ResolveError'
 
 export class DependencyError extends ResolveError {
 
-  shouldWait() { return true }
+  public shouldWait() { return true }
 
 }
 

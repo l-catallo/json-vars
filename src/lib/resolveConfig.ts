@@ -1,13 +1,13 @@
 import * as _ from 'lodash'
-import extractFieldASTs from './extractFieldASTs'
 import { DependencyError, FatalError, ResolveError } from './errors'
+import extractFieldASTs from './extractFieldASTs'
 import resolveField from './resolveField'
 import { Context, ObjectMap, Scope, Transformer } from './types'
 
 export default async function resolveConfig(
   obj: ObjectMap<any>,
   scopes: ObjectMap<Scope>,
-  transformers: ObjectMap<Transformer>
+  transformers: ObjectMap<Transformer>,
 ): Promise<ObjectMap<any>> {
 
   obj = Object.assign(obj)
@@ -19,27 +19,29 @@ export default async function resolveConfig(
   let resolved: number
   while (resolved !== 0) {
     resolved = 0
-    for (let path in asts) {
-      const ctx: Context = {
-        original: obj,
-        asts,
-        scopes,
-        transformers,
-      }
-      await resolveField(asts[path], ctx).then( res => {
-        resolved++
-        _.set(obj, path, res)
-        asts = _.omit(asts, path)
-      }).catch( err => {
-        if ( err instanceof ResolveError ) {
-          if ( !err.shouldWait() ) {
-            err.path = path
-            throw err
-          } // else ignore error and continue on
-        } else {
-          throw err
+    for (const path in asts) {
+      if (asts.hasOwnProperty(path)) {
+        const ctx: Context = {
+          asts,
+          original: obj,
+          scopes,
+          transformers,
         }
-      })
+        await resolveField(asts[path], ctx).then( res => {
+          resolved++
+          _.set(obj, path, res)
+          asts = _.omit(asts, path)
+        }).catch( err => {
+          if ( err instanceof ResolveError ) {
+            if ( !err.shouldWait() ) {
+              err.path = path
+              throw err
+            } // else ignore error and continue on
+          } else {
+            throw err
+          }
+        })
+      }
     }
   }
 

@@ -2,7 +2,7 @@ export abstract class ResolveError extends Error {
 
   public path: string
 
-  abstract shouldWait(): boolean
+  public abstract shouldWait(): boolean
 
 }
 

@@ -14,18 +14,18 @@ test.beforeEach(t => {
             default:
               throw new FatalError('')
           }
-        }
-      }
+        },
+      },
     },
-    transformers: {}
+    transformers: {},
   }
   t.context.solver = new Solver(options)
 })
 
 test('should ignore a config that does not contain variables', async t => {
   const obj = {
-    foo: 42,
     bar: 'some value',
+    foo: 42,
   }
   const res = t.context.solver.resolve(obj)
   t.plan(2)
@@ -35,29 +35,29 @@ test('should ignore a config that does not contain variables', async t => {
 
 test('should resolve simple variables', async t => {
   const obj = {
+    bar: {
+      bool: '${self:src.bool}',
+      num: '${self:src.num}',
+      str: '${self:src.str}',
+    },
     foo: '${env:FOO}',
     src: {
-      str: 'hello',
-      num: 42,
       bool: true,
-    },
-    bar: {
-      str: '${self:src.str}',
-      num: '${self:src.num}',
-      bool: '${self:src.bool}',
+      num: 42,
+      str: 'hello',
     },
   }
   const expected = {
+    bar: {
+      bool: true,
+      num: 42,
+      str: 'hello',
+    },
     foo: 'bar',
     src: {
-      str: 'hello',
-      num: 42,
       bool: true,
-    },
-    bar: {
-      str: 'hello',
       num: 42,
-      bool: true,
+      str: 'hello',
     },
   }
   const res = t.context.solver.resolve(obj)
@@ -68,14 +68,14 @@ test('should resolve simple variables', async t => {
 
 test('should handle dependencies between variables', async t => {
   const obj = {
-    foo: '${self:${env:FOO}}',
     bar: '${self:baz}',
     baz: '${env:FOO}',
+    foo: '${self:${env:FOO}}',
   }
   const expected = {
-    foo: 'bar',
     bar: 'bar',
     baz: 'bar',
+    foo: 'bar',
   }
   const res = t.context.solver.resolve(obj)
   t.plan(2)
@@ -85,9 +85,9 @@ test('should handle dependencies between variables', async t => {
 
 test('should detect dependency loops and fail', async t => {
   const obj = {
-    foo: '${self:${env:FOO}}',
     bar: '${self:baz}',
     baz: '${self:foo}',
+    foo: '${self:${env:FOO}}',
   }
   const res = t.context.solver.resolve(obj)
   t.plan(1)

@@ -4,15 +4,12 @@ export class FatalError extends ResolveError {
 
   public path: string
 
-  constructor(
-    msg: string,
-    path: string = undefined,
-  ) {
+  constructor( msg: string, path?: string ) {
     super(msg)
     this.path = path
   }
 
-  shouldWait() { return false }
+  public shouldWait() { return false }
 
 }
 

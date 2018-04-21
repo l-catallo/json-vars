@@ -21,24 +21,24 @@ import { ObjectMap } from './types'
  */
 export default function flattenObject( obj: object ): ObjectMap<any> {
 
-  function recursion<T>( path: string, obj: T ): ObjectMap<any> {
+  function recursion( path: string, currentValue: any ): ObjectMap<any> {
     let flatObj = {}
-    if (obj instanceof Array) {
-      obj.forEach( (val, i) => {
+    if (currentValue instanceof Array) {
+      currentValue.forEach( (val, i) => {
         const newPath = `${path}[${i}]`
         flatObj = { ...flatObj, ...recursion(newPath, val)}
       })
-    } else if (typeof obj === 'object') {
-      for (let key in obj) {
+    } else if (typeof currentValue === 'object' && currentValue !== null) {
+      Object.getOwnPropertyNames(currentValue).forEach( key => {
         const newPath = (path === '') ? key : `${path}.${key}`
-        const field = obj[key]
+        const field = currentValue[key]
         flatObj = { ...flatObj, ...recursion(newPath, field) }
-      }
+      })
     } else {
-      flatObj[path] = obj
+      flatObj[path] = currentValue
     }
-    return flatObj;
+    return flatObj
   }
 
-  return recursion('', obj);
+  return recursion('', obj)
 }

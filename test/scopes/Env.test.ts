@@ -25,9 +25,9 @@ test(
 
 function getFakeEnvScope( additionalEnv: ObjectMap<string> = {} ): Env {
   const env: ObjectMap<string> = {
-    FOO: 'bar',
     BAZ: '42',
-    ...additionalEnv
+    FOO: 'bar',
+    ...additionalEnv,
   }
   return new Env(env)
 }

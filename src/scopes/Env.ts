@@ -13,7 +13,7 @@ export class Env implements Scope {
     }
   }
 
-  async resolve( name: string ): Promise<Value> {
+  public async resolve( name: string ): Promise<Value> {
     if ( this.env[name] !== undefined ) {
       return this.env[name]
     } else {
