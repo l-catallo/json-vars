@@ -1,5 +1,8 @@
 # json-vars
-[![Build Status](https://travis-ci.org/l-catallo/json-vars.svg?branch=master)](https://travis-ci.org/l-catallo/json-vars)
+[![Build Status][build-img]][build-link]
+
+[build-link]: https://travis-ci.org/l-catallo/json-vars
+[build-img]: https://travis-ci.org/l-catallo/json-vars.svg?branch=master
 
 Enables the use of variables in JSON and JSON-like configuration files
 
@@ -42,35 +45,35 @@ number, `-`, `.` or `_`.
 An Argument can be any string, number or boolean. String Arguments can contain
 the same character set of names.
 
-If it's needed a Variable's name or a string Argument can be wrapped with
-with single or double quotes, in which case any character is allowed.
+If it's needed, a Variable's name or a string Argument can be wrapped in
+single or double quotes, in which case any character is allowed.
 
 ###### Scope
 
-The scope indicates to the Solver the context on which it should resolve the
-variable's name
+The Scope indicates to `json-vars` the context on which it should resolve the
+Variable's name.
 
 ###### Transformer
 
-A Transformer can modify the value coming from the scope before the final
+A Transformer can modify the value coming from the Scope before the final
 substitution happens. If multiple Transformers are chained, they are applied
-left to right
+left to right.
 
 #### Nesting Variables
 
 Variables can also be placed inside a Variable's name or a string Argument, this
 works only for unquoted strings.
 
-So in `"${self:foo.${env:ENV_VAR}}"` the inner variable will be resolved and
+So in `"${self:foo.${env:ENV_VAR}}"` the inner Variable will be resolved and
 replaced before the outer variale, while in `"${self:'foo.${env:ENV_VAR}'}"`
-the outer variable's name will be left as is.
+the outer Variable's name will be left as is.
 
 ## Builtin Scopes and Transformers
 
 #### Scopes
 
 ###### `env`
-Resolves the variable against the current shell environment.
+Resolves the Variable against the current shell environment.
 
 ###### `self`
 References another property of the current input object.
@@ -90,7 +93,10 @@ npm test
 
 ### And coding style tests
 
-Run [NSP](https://nodesecurity.io/) and [TSLint](https://palantir.github.io/tslint/)
+Run [NSP][nsp-link] and [TSLint][tslint-link]
+
+[nsp-link]: https://nodesecurity.io/
+[tslint-link]: https://palantir.github.io/tslint/
 
 ```sh
 npm run lint
