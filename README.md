@@ -68,6 +68,32 @@ So in `"${self:foo.${env:ENV_VAR}}"` the inner Variable will be resolved and
 replaced before the outer variale, while in `"${self:'foo.${env:ENV_VAR}'}"`
 the outer Variable's name will be left as is.
 
+#### Variable interpolation
+
+Once a Variable is resolved, its placeholder gets replaced with its resolved
+value.
+
+There are two possible replacement methods:
+- If the Variable was contained in a longer string, the resolved value is
+  stringified and then replaced.
+- If the Variable's placeholder exactly match the string that contains it, the
+  resolved value is returned as is and its type is preserved.
+
+###### Example
+```javascript
+{
+  "num": 42,
+  "stringified": "num is ${self:num}",
+  "preserved": "${self:num}"
+}
+// becomes
+{
+  "num": 42,
+  "stringified": "num is 42",
+  "preserved": 42
+}
+```
+
 ## Builtin Scopes and Transformers
 
 #### Scopes
