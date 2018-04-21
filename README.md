@@ -106,7 +106,7 @@ References another property of the current input object.
 
 #### Transformers
 
-###### `default(defaultValue)`
+###### `default(<defaultValue>)`
 Recover failures and return `defaultValue`, otherwise it has no effect.
 
 ## Running the tests
